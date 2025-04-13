@@ -66,7 +66,10 @@ function App() {
                     className={`mic-button ${isActiveAudio ? "listening" : ""}`}
                     onClick={handleGetAudioAndSend}
                 >
-                    🎤 {isActiveAudio ? "Đang nghe..." : "Nhấn để nói"}
+                    🎤{" "}
+                    {isActiveAudio
+                        ? "Đang nghe..."
+                        : "Nhấn để nói nơi bạn muốn đến"}
                 </button>
 
                 <div className="output-section">
