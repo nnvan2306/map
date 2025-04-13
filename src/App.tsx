@@ -34,7 +34,8 @@ function App() {
         const recognition = new SpeechRecognition();
         refAudio.current = recognition;
         recognition.continuous = false;
-        recognition.lang = "vi";
+        // recognition.lang = "vi";
+        recognition.lang = "vi-VN";
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
