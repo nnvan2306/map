@@ -28,7 +28,46 @@ function App() {
     };
 
     useEffect(() => {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API
+        if (!inputText) return;
+        const query = inputText.toLowerCase();
+        if (
+            (query.includes("từ") &&
+                (query.includes("đến") ||
+                    query.includes("tới") ||
+                    query.includes("đi"))) ||
+            query.includes("về")
+        ) {
+            let keywordFilter = "đến";
+            if (query.includes("tới")) {
+                keywordFilter = "tới";
+            }
+            if (query.includes("đi")) {
+                keywordFilter = "đi";
+            }
+            if (query.includes("về")) {
+                keywordFilter = "về";
+            }
+            const parts = query.split("từ")[1]?.split(keywordFilter);
+            if (parts && parts.length === 2) {
+                const startLocation = parts[0].trim();
+                const endLocation = parts[1].trim();
+                getDirections(startLocation, endLocation);
+            }
+        }
+    }, [inputText]);
+
+    const getDirections = (startLocation: string, endLocation: string) => {
+        const baseUrl = "https://www.google.com/maps/dir";
+        const urlStart = encodeURIComponent(startLocation);
+        const urlEnd = encodeURIComponent(endLocation);
+        const url = `${baseUrl}/${urlStart}/${urlEnd}`;
+        window.open(url, "_blank");
+        console.log(
+            `Đây là quãng đường ngắn nhất từ ${startLocation} đến ${endLocation}`
+        );
+    };
+
+    useEffect(() => {
         const SpeechRecognition =
             window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -43,7 +82,7 @@ function App() {
             setIsActiveAudio(false);
             const transcript = event.results[0][0].transcript;
             setInputText(transcript);
-            handleNavigateToGoogleMap(transcript);
+            // handleNavigateToGoogleMap(transcript);
         };
 
         recognition.onspeechend = function () {
